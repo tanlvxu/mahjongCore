@@ -1,0 +1,183 @@
+Lua Profile output created by profiler.lua. Copyright Pepperfish 2002+
+
+------------------- L:mayHu@@F:\mahjong\branch\server\sddezhoumj\MJServer\Resource\scripts\GameServer\bin\framework\mjcommon\BYFramework\logic\demo\demo.lua:237 -------------------
+Call count:         3826
+Time spend total:       11.350s
+Time spent in children: 9.394s
+Time spent in self:     1.956s
+Time spent per call:  0.00297s/call
+Time spent in self per call: 0.00051s/call
+
+Child C:ipairs@=[C]:?                           called  26730 times. Took 0.11s
+Child L:mayHu@@F:\mahjong\branch\server\sddezhoumj\MJServer\Resource\scripts\GameServer\bin\framework\mjcommon\BYFramework\logic\demo\demo.lua:237 called   3762 times. Took 8.01s
+Child L:remainPai@@F:\mahjong\branch\server\sddezhoumj\MJServer\Resource\scripts\GameServer\bin\framework\mjcommon\BYFramework\logic\demo\demo.lua:306 called   3826 times. Took 0.30s
+Child C:(for generator)@=[C]:?                  called 255737 times. Took 0.97s
+
+--------------------------- C:(for generator)@=[C]:? ---------------------------
+Call count:         282649
+Time spend total:       1.061s
+Time spent in children: 0.000s
+Time spent in self:     1.061s
+Time spent per call:  0.00000s/call
+Time spent in self per call: 0.00000s/call
+
+------------------- L:remainPai@@F:\mahjong\branch\server\sddezhoumj\MJServer\Resource\scripts\GameServer\bin\framework\mjcommon\BYFramework\logic\demo\demo.lua:306 -------------------
+Call count:         3826
+Time spend total:       0.302s
+Time spent in children: 0.102s
+Time spent in self:     0.200s
+Time spent per call:  0.00008s/call
+Time spent in self per call: 0.00005s/call
+
+Child C:ipairs@=[C]:?                           called   3826 times. Took 0.01s
+Child C:(for generator)@=[C]:?                  called  26782 times. Took 0.09s
+
+------------------------------- C:ipairs@=[C]:? --------------------------------
+Call count:         30572
+Time spend total:       0.121s
+Time spent in children: 0.000s
+Time spent in self:     0.121s
+Time spent per call:  0.00000s/call
+Time spent in self per call: 0.00000s/call
+
+------------------- L:ting@@F:\mahjong\branch\server\sddezhoumj\MJServer\Resource\scripts\GameServer\bin\framework\mjcommon\BYFramework\logic\demo\demo.lua:331 -------------------
+Call count:            1
+Time spend total:       3.339s
+Time spent in children: 3.338s
+Time spent in self:     0.001s
+Time spent per call:  3.33900s/call
+Time spent in self per call: 0.00100s/call
+
+Child C:ipairs@=[C]:?                           called      7 times. Took 0.00s
+Child L:getCard@@F:\mahjong\branch\server\sddezhoumj\MJServer\Resource\scripts\GameServer\bin\framework\mjcommon\BYFramework\logic\demo\demo.lua:178 called      4 times. Took 0.00s
+Child C:format@=[C]:?                           called      2 times. Took 0.00s
+Child C:(for generator)@=[C]:?                  called     67 times. Took 0.00s
+Child C:<function: 02877568>@=[C]:?             called      4 times. Took 0.00s
+Child L:mayHu@@F:\mahjong\branch\server\sddezhoumj\MJServer\Resource\scripts\GameServer\bin\framework\mjcommon\BYFramework\logic\demo\demo.lua:237 called     64 times. Took 3.34s
+Child C:print@=[C]:?                            called      2 times. Took 0.00s
+Child L:cloneMT@@F:\mahjong\branch\server\sddezhoumj\MJServer\Resource\scripts\GameServer\bin\framework\mjcommon\BYFramework\logic\demo\demo.lua:166 called      9 times. Took 0.00s
+
+----------------------------- C:setmetatable@=[C]:? ----------------------------
+Call count:            4
+Time spend total:       0.000s
+Time spent in children: 0.000s
+Time spent in self:     0.000s
+Time spent per call:  0.00000s/call
+Time spent in self per call: 0.00000s/call
+
+------------------------- C:<function: 02877568>@=[C]:? ------------------------
+Call count:            6
+Time spend total:       0.000s
+Time spent in children: 0.000s
+Time spent in self:     0.000s
+Time spent per call:  0.00000s/call
+Time spent in self per call: 0.00000s/call
+
+Child L:<function: 026EDB10>@@../core\Card.lua:66 called      4 times. Took 0.00s
+
+--------------------------------- C:bor@=[C]:? ---------------------------------
+Call count:            4
+Time spend total:       0.000s
+Time spent in children: 0.000s
+Time spent in self:     0.000s
+Time spent per call:  0.00000s/call
+Time spent in self per call: 0.00000s/call
+
+------------------------------- C:brshift@=[C]:? -------------------------------
+Call count:            4
+Time spend total:       0.000s
+Time spent in children: 0.000s
+Time spent in self:     0.000s
+Time spent per call:  0.00000s/call
+Time spent in self per call: 0.00000s/call
+
+--------------------------------- C:band@=[C]:? --------------------------------
+Call count:            4
+Time spend total:       0.000s
+Time spent in children: 0.000s
+Time spent in self:     0.000s
+Time spent per call:  0.00000s/call
+Time spent in self per call: 0.00000s/call
+
+--------------------------------- C:open@=[C]:? --------------------------------
+Call count:            1
+Time spend total:       0.000s
+Time spent in children: 0.000s
+Time spent in self:     0.000s
+Time spent per call:  0.00000s/call
+Time spent in self per call: 0.00000s/call
+
+-------------------------- L:new@@../core\Card.lua:76 --------------------------
+Call count:            4
+Time spend total:       0.000s
+Time spent in children: 0.000s
+Time spent in self:     0.000s
+Time spent per call:  0.00000s/call
+Time spent in self per call: 0.00000s/call
+
+Child C:setmetatable@=[C]:?                     called      4 times. Took 0.00s
+Child C:brshift@=[C]:?                          called      4 times. Took 0.00s
+Child C:band@=[C]:?                             called      4 times. Took 0.00s
+
+------------------- L:<function: 026EDB10>@@../core\Card.lua:66 -------------------
+Call count:            4
+Time spend total:       0.000s
+Time spent in children: 0.000s
+Time spent in self:     0.000s
+Time spent per call:  0.00000s/call
+Time spent in self per call: 0.00000s/call
+
+------------------------------- C:format@=[C]:? --------------------------------
+Call count:            2
+Time spend total:       0.000s
+Time spent in children: 0.000s
+Time spent in self:     0.000s
+Time spent per call:  0.00000s/call
+Time spent in self per call: 0.00000s/call
+
+------------------- L:cloneMT@@F:\mahjong\branch\server\sddezhoumj\MJServer\Resource\scripts\GameServer\bin\framework\mjcommon\BYFramework\logic\demo\demo.lua:166 -------------------
+Call count:            9
+Time spend total:       0.000s
+Time spent in children: 0.000s
+Time spent in self:     0.000s
+Time spent per call:  0.00000s/call
+Time spent in self per call: 0.00000s/call
+
+Child C:ipairs@=[C]:?                           called      9 times. Took 0.00s
+Child C:(for generator)@=[C]:?                  called     63 times. Took 0.00s
+
+-------------------------------- C:print@=[C]:? --------------------------------
+Call count:            2
+Time spend total:       0.000s
+Time spent in children: 0.000s
+Time spent in self:     0.000s
+Time spent per call:  0.00000s/call
+Time spent in self per call: 0.00000s/call
+
+Child C:<function: 02877568>@=[C]:?             called      2 times. Took 0.00s
+
+------------------------------- C:lshift@=[C]:? --------------------------------
+Call count:            4
+Time spend total:       0.000s
+Time spent in children: 0.000s
+Time spent in self:     0.000s
+Time spent per call:  0.00000s/call
+Time spent in self per call: 0.00000s/call
+
+------------------- L:getCard@@F:\mahjong\branch\server\sddezhoumj\MJServer\Resource\scripts\GameServer\bin\framework\mjcommon\BYFramework\logic\demo\demo.lua:178 -------------------
+Call count:            4
+Time spend total:       0.000s
+Time spent in children: 0.000s
+Time spent in self:     0.000s
+Time spent per call:  0.00000s/call
+Time spent in self per call: 0.00000s/call
+
+Child L:new@@../core\Card.lua:76                called      4 times. Took 0.00s
+Child C:lshift@=[C]:?                           called      4 times. Took 0.00s
+Child C:bor@=[C]:?                              called      4 times. Took 0.00s
+
+
+
+Total time spent in profiled functions:  3.34s
+
+END
