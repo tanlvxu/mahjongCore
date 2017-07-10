@@ -7,6 +7,7 @@
 --local utils,NROWS,NCOLS = unpack(import(".utils"))
 require("BYFramework._load");
 require("BYFramework.logic.demo.profiler");
+require("coroutine");
 local utils,NROWS,NCOLS = unpack(import("utils"))
 local Group = import("group")
 local change = {"wan","tong","tiao","feng"}
@@ -112,9 +113,6 @@ local function getSameShun(currentIndex,cards,cardsCount)
           group = {card,-1,-1} ;
           needLaiziCount = needLaiziCount + 2 ;
      end   
-     if card == 50 then
-       local a = 2 ;
-     end
       removeCards(cardsCount,group);
       groups = table.merge2(groups,group);
    end
@@ -178,8 +176,6 @@ combine_shun_ke = function(handcards,cardsGroup,start,groups,laiziCount,cardsCou
     local cards = cardsGroup[change[start]] ;
 
     if  lineCount == 0 then
-    --   print("RT",cardIndex);
-    --   dump(groups,"RT");
        checkThree(handcards,cardsGroup,start+1,groups,laiziCount,cardsCount,hasJiang)
     end
     local add_after_remove = function(leaveLaiziNum,group,i)
@@ -196,9 +192,6 @@ combine_shun_ke = function(handcards,cardsGroup,start,groups,laiziCount,cardsCou
           lineCount =  lineCount + groupLen - leaveLaiziNum ;
           addCards(cardsCount,group);
           return false ;
-        end
-        if group[1] == 50 then
-        local a = 1 ;
         end
         insertTb(groups,group);
         combine_shun_ke(handcards,cardsGroup,start,groups,laiziCount,cardsCount,i+1,hasJiang,lineCount);
@@ -218,18 +211,19 @@ combine_shun_ke = function(handcards,cardsGroup,start,groups,laiziCount,cardsCou
     for i=cardIndex,#cards do
     	local card = cards[i] ;
         local num = cardsCount[card] ;
-      --  if i == 9 then
-      --    dump(groups,"Test");
-      --  end
         if num > 0 then
            do
            local leaveLaiziNum,group = getSameKe(i,cards,cardsCount)
               add_after_remove(leaveLaiziNum,group,i);
            end
+           if start == 4 then --风牌箭牌走自己的逻辑
 
+               
+           else
            do          
            local group,leaveLaiziNum = getSameShun(i,cards,cardsCount) ;
               add_after_remove(leaveLaiziNum,group,i);
+           end
            end
         end
         
@@ -240,9 +234,6 @@ end
 local function getLineCount(cardsCount,cardsGroup,start)
     local cards = cardsGroup[change[start]] ;
     local num = 0 ;
-    if cards == nil then
-     print("sss");
-    end
     for k,v in ipairs(cards) do
       if cardsCount[v] then
          num = num + cardsCount[v] ;
@@ -270,13 +261,6 @@ local function __simple_check(start,cardsGroup,laiziCount,cardsCount,hasJiang)
     return false
 end
 
-local function getLastCard(cardsCount)
-    for k,v in pairs(cardsCount) do
-        if v== 1 then
-            return v ;
-        end
-    end
-end
 
 --[[
   顺刻检测算法
@@ -302,21 +286,20 @@ end
          needRemoveCount = needRemoveCount + laiziCount/3 ;
          laiziCount = 0 ;
       end
-        --dump(groups,"TerryTan complete");
-       -- print("TerryTan",needRemoveCount);
+
        if laiziCount > 0 then
         return
        end
-         dump(groups,"TerryTan complete");
-        count = count + 1;
-        for i=1,needRemoveCount do
+        
+       for i=1,needRemoveCount do
         table.remove(groups);
-        end
+       end
+        --找到一组就返回
+        dump(groups,"TerryTan complete");
+        coroutine.yield(true);
         return ;
       end
-      if start == 4 then
-      -- print("ddd");
-      end
+
       if laiziCount < 0 or __simple_check(start,cardsGroup,laiziCount,cardsCount,hasJiang) then
            return false ;
       end
@@ -364,34 +347,25 @@ local function allocateCards(cardsGroup,handcards,cardsCount)
        	    end
         end
     end
-    -- dump(cardsCount,"cardsGroup");
 end
-
-
-
 
 
 local function complete(mahjong,handcards,laiziCount,lastCard,postman)
 
-   count = 0 ;
 	local cardCount = #handcards
 	local cardsGroup = {wan={},tong={},tiao={},feng={}} --将麻将子分为4种
 	local cardsCount = {} --将麻将子分为4种
 	local groups = {} ;
-	local mark = {}
 	allocateCards(cardsGroup,handcards, cardsCount);
-
-	checkThree(handcards,cardsGroup,1,groups,laiziCount,cardsCount,false) ;
-  print("count",count);
+  --开启协程
+	coroutine.resume(coroutine.create(checkThree),handcards,cardsGroup,1,groups,laiziCount,cardsCount,false);
 	return resultInfo
   end
-
-
 
   profiler = newProfiler("call")
   profiler:start()
 --  complete({},{1,2,3,4,5,6,6,6,7,7,8,8,9,9},0,{}) ;
-  complete({},{1,2,6,21,22,25},8,{}) ;
+  complete({},{1,2,3,4,5,6,7,8,9,17,17,18,19,20},0,{}) ;
   local outfile = io.open( "profile2.txt", "w+" )
   profiler:report( outfile )
-   outfile:close()
+  outfile:close()
