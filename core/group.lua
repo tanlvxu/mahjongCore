@@ -4,7 +4,7 @@ local Group = class("Group",GameObject)
 Group.TYPE_JIANG = 1
 Group.TYPE_KE = 2
 Group.TYPE_SHUN = 3
-
+Group.TYPE_SHUN_OR_KE = 4 ;
 function Group:ctor()
 	self.m_elems = {}
 	self.m_type = 0

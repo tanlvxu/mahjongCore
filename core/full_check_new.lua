@@ -12,78 +12,83 @@ local utils,NROWS,NCOLS = unpack(import("utils"))
 local Group = import("group")
 local change = {"wan","tong","tiao","feng"}
 
+local function make_three_group(type,c1,c2,c3)
+  local group = new(Group)
+  group:addThree(c1,c2,c3)
+  group:setType(type)
+  return group
+end
+
+local function make_two_group(type,c1,c2)
+  local group = new(Group)
+  group:addTwo(c1,c2)
+  group:setType(type)
+  return group
+end
+
 local combine_jiang_and_shun_ke;
 local combine_shun_ke ;
-
 combine_jiang_and_shun_ke = function(handcards,cardsGroup,start,groups,laiziCount,cardsCount,cardIndex,hasJiang,lineCount)
     local cards = cardsGroup[change[start]] ;
     for i=cardIndex,#cards do
     	  local card = cards[i] ;
-    	  local jiang = nil ;
           local num = cardsCount[card] ;
           if num > 1 then
-             if card == 50 then
-             local a = 1 ;
-             end
-             jiang = {card,card} ;
              cardsCount[card] = cardsCount[card] - 2;
-             table.insert(groups,jiang) ;
+             table.insert(groups,make_two_group(Group.TYPE_JIANG,card,card)) ;
              lineCount = lineCount - 2 ;
-           --  if start == 4 then 
-           --   combine_ke(handcards,cardsGroup,start,groups,laiziCount,cardsCount,cardIndex,hasJiang);	
-           --  else
              combine_shun_ke(handcards,cardsGroup,start,groups,laiziCount,cardsCount,1,hasJiang,lineCount);
-        	-- end
              lineCount = lineCount + 2 ;
              table.remove(groups) ;
              cardsCount[card] = cardsCount[card] + 2;
-          else
-             if card == 9 then
-               local a = 1 ;
-             end 
-          	 jiang = {card,-1} ;
-             cardsCount[card] = 0;
+          end
+             cardsCount[card] = cardsCount[card] - 1;
              laiziCount = laiziCount - 1 ;
-             table.insert(groups,jiang) ;
+             table.insert(groups,make_two_group(Group.TYPE_JIANG,card,-1)) ;
              lineCount = lineCount -1 ;
-          --   if start == 4 then
- 		     --combine_ke(handcards,cardsGroup,start,groups,laiziCount,cardsCount,cardIndex,hasJiang);	
-          --   else
              combine_shun_ke(handcards,cardsGroup,start,groups,laiziCount,cardsCount,1,hasJiang,lineCount);
-       		-- end
              table.remove(groups) ;
              laiziCount = laiziCount + 1 ; 
              lineCount = lineCount + 1 ;
-             cardsCount[card] = 1;
-          end 
+             cardsCount[card] = cardsCount[card] + 1;
     end
 end
-
-local function combine_ke(handcards,cardsGroup,start,groups,laiziCount,cardsCount,cardIndex,hasJiang)
-
-    checkThree(handcards,cardsGroup,start,groups)	
-end
-
 
 
 local removeCards = function(cardsCount,cards)
-   for k,v in pairs(cards) do
-    if v ~= -1 then
-      cardsCount[v] = cardsCount[v] - 1 ;
-    end
+   local removetablecards = function(tb)
+        for k,v in pairs(tb.m_elems) do
+         if v ~= -1 then
+           cardsCount[v] = cardsCount[v] - 1 ;
+         end
+        end
    end
+
+  if cards[1] and type(cards[1]) == "table" then 
+      for i=1,#cards do
+        removetablecards(cards[i])
+      end
+  else
+      removetablecards(cards)
+  end
 end
-
-
 
 local addCards = function(cardsCount,cards)
-   for k,v in pairs(cards) do
-     if v~= -1 then
-      cardsCount[v] = cardsCount[v] + 1 ;
-     end
-   end
+  local addtablecards = function(tb)
+      for k,v in pairs(tb.m_elems) do
+        if v~= -1 then
+         cardsCount[v] = cardsCount[v] + 1 ;
+        end
+      end
+  end
+  if cards[1] and type(cards[1]) == "table" then 
+      for i=1,#cards do
+        addtablecards(cards[i])
+      end
+  else
+      addtablecards(cards)
+  end 
 end
-
 
 local function getSameShun(currentIndex,cards,cardsCount)
 	 local groups = {} ;
@@ -94,27 +99,27 @@ local function getSameShun(currentIndex,cards,cardsCount)
      if cards[currentIndex+1] == card +1  then
         if cards[currentIndex+2] == card + 2 and cardsCount[card + 2] > 0 then
             if  cardsCount[card + 1] >0 then 
-               group = {card,card+1,card+2} ;
+               group = make_three_group(Group.TYPE_SHUN,card,card+1,card+2); --{card,card+1,card+2} ;
             else
-               group = {card,card+2,-1} ;
+               group = make_three_group(Group.TYPE_SHUN,card,card+2,-1) --{card,card+2,-1} ;
                needLaiziCount = needLaiziCount + 1 ;
             end
         elseif cardsCount[card + 1] >0 then
-              group = {card,card+1,-1} ;
+              group = make_three_group(Group.TYPE_SHUN,card,card+1,-1) --{card,card+1,-1} ;
               needLaiziCount = needLaiziCount + 1 ;
         else
-              group = {card,-1,-1} ;
+              group = make_three_group(Group.TYPE_SHUN_OR_KE,card,-1,-1) --{card,-1,-1} ;
               needLaiziCount = needLaiziCount + 2 ;
         end
      elseif cards[currentIndex+1] == card +2 and cardsCount[card + 2] > 0  then
-          group = {card,-1,card+2 } ;
+          group = make_three_group(Group.TYPE_SHUN,card,-1,card+2) --{card,-1,card+2 } ;
           needLaiziCount = needLaiziCount + 1 ;
      else
-          group = {card,-1,-1} ;
+          group = make_three_group(Group.TYPE_SHUN_OR_KE,card,-1,-1) --{card,-1,-1} ;
           needLaiziCount = needLaiziCount + 2 ;
      end   
       removeCards(cardsCount,group);
-      groups = table.merge2(groups,group);
+      table.insert(groups,group);
    end
    
     return groups,needLaiziCount ;
@@ -124,16 +129,13 @@ end
 local function getSameKe(currentIndex,cards,cardsCount)
      local group = nil ;
 	 local card  = cards[currentIndex] ;
-    if card == 50 then
-       local a = 2 ;
-     end
      if cardsCount[card] == 2 then
-        group = {card,card,-1} ;
+        group = make_three_group(Group.TYPE_KE,card,card,-1);           --{card,card,-1} ;
         removeCards(cardsCount,group)
         return 1,group ;
      end
      if cardsCount[card] == 3 then
-        group = {card,card,card} ;
+        group = make_three_group(Group.TYPE_KE,card,card,card);         --{card,card,card} ;
         removeCards(cardsCount,group)
         return 0,group ;
      end
@@ -141,28 +143,18 @@ local function getSameKe(currentIndex,cards,cardsCount)
 end
 
 local function insertTb(groups,group)
-    if #group > 3 then
-       local  count = 0 ;
-       local  temp = {} ;
+    if group[1] and type(group[1]) == "table" then
        for i = 1 ,#group do 
-          count = count + 1 ;
-          table.insert(temp,group[i]);
-          if count % 3 == 0 then
-              table.insert(groups,temp) ;
-              temp = {} ;
-          end 
+          table.insert(groups,group[i]); 
        end
     else
-      if #groups == 4 then
-          local a = 1 ;
-      end
        table.insert(groups,group) ;
     end
 end
 
 local function removeTb(groups,group)
-    if #group > 3 then
-       for i =1,(#group/3) do
+    if group[1] and type(group[1]) == "table" then
+       for i =1,#group do
        table.remove(groups);
        end
     else
@@ -181,7 +173,7 @@ combine_shun_ke = function(handcards,cardsGroup,start,groups,laiziCount,cardsCou
     local add_after_remove = function(leaveLaiziNum,group,i)
         if not group then return false ;end
         local groupLen = 3
-        if group then groupLen = #group end ;
+        if group[1] and type(group[1]) == "table" then groupLen = #group * 3 end ;
         if leaveLaiziNum > 0 then
          laiziCount = laiziCount - leaveLaiziNum ; 
          lineCount = lineCount - groupLen + leaveLaiziNum ;
@@ -214,19 +206,26 @@ combine_shun_ke = function(handcards,cardsGroup,start,groups,laiziCount,cardsCou
         if num > 0 then
            do
            local leaveLaiziNum,group = getSameKe(i,cards,cardsCount)
+            --   dump(group,"group1");
               add_after_remove(leaveLaiziNum,group,i);
            end
+        if groups[1] and groups[1].m_elems[1] == 17 then
+             dump(group,"group2");
+            end
+             --    dump(groups,"TerryTan complete");
            if start == 4 then --风牌箭牌走自己的逻辑
 
                
            else
            do          
            local group,leaveLaiziNum = getSameShun(i,cards,cardsCount) ;
+            if groups[1] and groups[1].m_elems[1] == 17 then
+             dump(group,"group1");
+            end
               add_after_remove(leaveLaiziNum,group,i);
            end
            end
-        end
-        
+        end       
     end
 end
 
@@ -246,10 +245,10 @@ local function __simple_check(start,cardsGroup,laiziCount,cardsCount,hasJiang)
 
     local needLaiziCount = 0
     for i = start,4 do
-    local count = getLineCount(cardsCount,cardsGroup,start);
-    if count % 3 ~= 0 then
-            needLaiziCount = needLaiziCount + 3 - (count % 3)
-    end
+    local count = getLineCount(cardsCount,cardsGroup,i);
+      if count % 3 ~= 0 then
+        needLaiziCount = needLaiziCount + 3 - (count % 3)
+      end
     end
     
     if needLaiziCount > laiziCount and hasJiang then
@@ -266,11 +265,12 @@ end
   顺刻检测算法
 ]]
  checkThree = function(handcards,cardsGroup,start,groups,laiziCount,cardsCount,hasJiang)
+
       if start > 4 then
       local needRemoveCount = 0 ;
       if not hasJiang then
           if  laiziCount /3 == 2 then
-             table.insert(groups,{-1,-1});
+             table.insert(groups,make_two_group(Group.TYPE_JIANG,-1,-1));
              laiziCount = laiziCount - 2 ;
              needRemoveCount = needRemoveCount + 1;
           else
@@ -281,7 +281,7 @@ end
       
       if laiziCount>0 and laiziCount%3 == 0 then
          for i = 1,laiziCount/3 do
-             table.insert(groups,{-1,-1,-1});
+             table.insert(groups,make_three_group(Group.TYPE_SHUN_OR_KE,-1,-1,-1) );
          end
          needRemoveCount = needRemoveCount + laiziCount/3 ;
          laiziCount = 0 ;
@@ -296,7 +296,7 @@ end
        end
         --找到一组就返回
         dump(groups,"TerryTan complete");
-        coroutine.yield(true);
+       -- coroutine.yield(true);
         return ;
       end
 
@@ -309,9 +309,6 @@ end
          return ;
       end
       if not hasJiang then
-         if start == 4 then
-          local a = 1 
-         end
          combine_jiang_and_shun_ke(handcards,cardsGroup,start,groups,laiziCount,cardsCount,1,true,getLineCount(cardsCount,cardsGroup,start)) 
          combine_shun_ke(handcards,cardsGroup,start,groups,laiziCount,cardsCount,1,hasJiang,getLineCount(cardsCount,cardsGroup,start))
       else
@@ -365,7 +362,7 @@ local function complete(mahjong,handcards,laiziCount,lastCard,postman)
   profiler = newProfiler("call")
   profiler:start()
 --  complete({},{1,2,3,4,5,6,6,6,7,7,8,8,9,9},0,{}) ;
-  complete({},{1,2,3,4,5,6,7,8,9,17,17,18,19,20},0,{}) ;
+  complete({},{1,2,3,4,5,6,7,8,9,17,17,18,19},1,{}) ;
   local outfile = io.open( "profile2.txt", "w+" )
   profiler:report( outfile )
   outfile:close()
